@@ -92,7 +92,8 @@ public class InputParserUtils {
      */
     private static OrderItem createOrderItem(List<String> splittedInput){
         boolean isImported = splittedInput.get(1).contains("imported");
-        Item item = new Item(splittedInput.get(1),Double.valueOf(splittedInput.get(2)), isImported);
+        String itemName = splittedInput.get(1).replaceAll("[ ]?imported","").trim();
+        Item item = new Item(itemName,Double.valueOf(splittedInput.get(2)), isImported);
         return new OrderItem(item, Integer.valueOf(splittedInput.get(0)));
     }
 }

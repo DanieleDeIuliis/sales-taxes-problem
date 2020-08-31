@@ -37,12 +37,11 @@ public class ConsoleAppMain {
 
     public static String callComputePriceAndTaxesService(String inputFileName) throws FileNotFoundException {
         ComputePriceAndTaxes service = new ComputePriceAndTaxesImpl();
-        URL fileURL = ConsoleAppMain.class.getClassLoader().getResource(inputFileName);
         List<OrderItem> orderedItems = null;
-        if(fileURL != null){
-            File inputFile = new File(fileURL.getFile());
+        try{
+            File inputFile = new File(inputFileName);
             orderedItems = InputParserUtils.parseInputFromFile(inputFile);
-        }else{
+        }catch(FileNotFoundException e){
             throw new FileNotFoundException("Input file not found. Insert an existing file name");
         }
         return service.computeTotalPriceWithTaxes(orderedItems);

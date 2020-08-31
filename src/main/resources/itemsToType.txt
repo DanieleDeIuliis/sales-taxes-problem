@@ -1,7 +1,5 @@
 chocolate bar -- FOOD
-imported box of chocolates -- FOOD
-box of imported chocolates -- FOOD
+box of chocolates -- FOOD
 book -- BOOK
 packet of headache pills -- MEDICINE
 bottle of perfume -- GENERAL
-imported bottle of perfume -- GENERAL

@@ -35,15 +35,16 @@ public class ComputePriceAndTaxesImpl implements ComputePriceAndTaxes{
         double totalTaxedAmount = 0;
         double totalCost = 0;
         for(OrderItem item : orderedItems){
-            outputBuilder.append(String.format( "%d %s: %.2f\n",
+            outputBuilder.append(String.format( "%d %s%s: %.2f\n",
                     item.getQuantity(),
+                    item.getItem().isImported() ? "imported " : "",
                     item.getItem().getName(),
                     item.computeTotalCost()));
             totalTaxedAmount += item.computeTaxAmount() * item.getQuantity();
             totalCost += item.computeTotalCost();
         }
         outputBuilder.append(String.format("Sales Taxes: %.2f\n", totalTaxedAmount));
-        outputBuilder.append(String.format("Total: %.2f", totalCost));
+        outputBuilder.append(String.format("Total: %.2f\n", totalCost));
         return  outputBuilder.toString();
     }
 }

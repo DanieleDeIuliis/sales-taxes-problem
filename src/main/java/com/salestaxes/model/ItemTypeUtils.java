@@ -57,6 +57,7 @@ public class ItemTypeUtils {
             type = itemToTypeMap.get(itemName);
         }else{
             type = ItemType.GENERAL;
+            log.warn("Item {} not found. GENERAL type will be used.", itemName);
         }
         log.debug("Type of {}: {}", itemName, type);
         return type;
