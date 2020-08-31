@@ -27,33 +27,54 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 
 @Slf4j
 @Data
-@AllArgsConstructor
 public class OrderItem {
 
     private Item item;
     private int quantity;
+    private DecimalFormat taxAndCostFormat;
+
+    public OrderItem(Item item, int quantity) {
+        this.item = item;
+        this.quantity = quantity;
+        this.taxAndCostFormat = new DecimalFormat("#.##");
+        this.taxAndCostFormat.setRoundingMode(RoundingMode.HALF_UP);
+    }
 
     /**
      * Computes the total cost for an ordered item based on its quantity
      * @return total cost of the ordered item
      */
     public double computeTotalCost(){
-        double totalCostBeforeRounding = computeUnitCost() * quantity;
-        double totalCostAfterRounding = Math.round(totalCostBeforeRounding * 20) / 20.0;
-        log.debug("Total cost for item {}: {}", item.getName(), totalCostAfterRounding);
-        return totalCostAfterRounding;
+        double totalCost = Double.valueOf(taxAndCostFormat.format(computeUnitCost() * quantity));
+        log.debug("Total cost for item {}: {}", item.getName(), totalCost);
+        return totalCost;
     }
 
+    /**
+     * Computes the taxed amount to be added to the price
+     * @return taxed amount to add
+     */
+    public double computeTaxAmount(){
+        double taxedAmountBeforeRounding = item.getPrice() * (item.getTaxAmount() / 100d);
+        BigDecimal v = new BigDecimal(taxedAmountBeforeRounding);
+        BigDecimal increment = new BigDecimal(0.05);
+        BigDecimal numbersOfIncrementInTaxesAmount = v.divide(increment,0, RoundingMode.UP);
+        BigDecimal taxedAmountAfterRounding = numbersOfIncrementInTaxesAmount.multiply(increment);
+        return  Double.valueOf(taxAndCostFormat.format(taxedAmountAfterRounding.doubleValue()));
+    }
     /**
      * Computes the cost of a single ordered item based on its taxes amount
      * @return the unit cost + computed taxes amount
      */
     private double computeUnitCost(){
-        double taxAmountOverPrice = item.getPrice() * (item.getTaxAmount() / 100d);
-        double unitCost = item.getPrice() + taxAmountOverPrice;
+        double unitCost = item.getPrice() + computeTaxAmount();
         log.debug("Unit cost for item {}: {}", item.getName(), unitCost);
         return unitCost;
     }

@@ -23,8 +23,35 @@ MIT License
 */
 package com.salestaxes.consoleapp;
 
+import com.salestaxes.model.OrderItem;
+import com.salestaxes.service.ComputePriceAndTaxes;
+import com.salestaxes.service.ComputePriceAndTaxesImpl;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.List;
+import java.util.Scanner;
+
 public class ConsoleAppMain {
-    public static void main(String[] args) {
-        
+
+    public static String callComputePriceAndTaxesService(String inputFileName) throws FileNotFoundException {
+        ComputePriceAndTaxes service = new ComputePriceAndTaxesImpl();
+        URL fileURL = ConsoleAppMain.class.getClassLoader().getResource(inputFileName);
+        List<OrderItem> orderedItems = null;
+        if(fileURL != null){
+            File inputFile = new File(fileURL.getFile());
+            orderedItems = InputParserUtils.parseInputFromFile(inputFile);
+        }else{
+            throw new FileNotFoundException("Input file not found. Insert an existing file name");
+        }
+        return service.computeTotalPriceWithTaxes(orderedItems);
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        System.out.println("Please insert the name of the input file including the extension:");
+        Scanner inputReader = new Scanner(System.in);
+        String inputFileName = inputReader.nextLine();
+        System.out.println(callComputePriceAndTaxesService(inputFileName));
     }
 }

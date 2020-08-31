@@ -25,8 +25,11 @@ package com.salestaxes.model;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Utility class to compute the type of an item based on its name
@@ -41,12 +44,7 @@ public class ItemTypeUtils {
         GENERAL
     }
 
-    private static Map<String, ItemType> itemToTypeMap = new HashMap<>() {{
-        put("chocolate bar", ItemType.FOOD);
-        put("book", ItemType.BOOK);
-        put("headache pills", ItemType.MEDICINE);
-        put("bottle of perfume", ItemType.GENERAL);
-    }};
+    private static Map<String, ItemType> itemToTypeMap = importItemsFromFile();
 
     /**
      * retrieves the type of the item based on its name. GENERAL is the default type
@@ -62,5 +60,28 @@ public class ItemTypeUtils {
         }
         log.debug("Type of {}: {}", itemName, type);
         return type;
+    }
+
+    /**
+     * It reads items and type and fills the corresponding map
+     * @return the map with key: itemName and value: itemType
+     */
+    private static Map<String, ItemType> importItemsFromFile() {
+        Map<String, ItemType> itemToTypeMap = new HashMap<>();
+        File itemsToTypeFile = new File(
+                ItemTypeUtils.class.getClassLoader().getResource("itemsToType.txt").getFile());
+        Scanner itemScanner = null;
+        try {
+            itemScanner = new Scanner(itemsToTypeFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while(itemScanner.hasNextLine()){
+            String[] itemTypeArray = (itemScanner.nextLine()).split("--");
+            String itemName = itemTypeArray[0].trim();
+            String itemType = itemTypeArray[1].trim();
+            itemToTypeMap.put(itemName, ItemType.valueOf(itemType));
+        }
+        return itemToTypeMap;
     }
 }

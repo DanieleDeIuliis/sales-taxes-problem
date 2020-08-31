@@ -38,7 +38,7 @@ public class OrderItemTest {
     public void testComputeTotalCostMultiQuantity(){
         OrderItem orderItem = new OrderItem(
                 new Item("bottle of perfume", 30.5,false),3);
-        Assertions.assertEquals(100.65, orderItem.computeTotalCost());
+        Assertions.assertEquals(100.80, orderItem.computeTotalCost());
     }
     @Test
     public void testComputeTotalCostRoundedOutput(){

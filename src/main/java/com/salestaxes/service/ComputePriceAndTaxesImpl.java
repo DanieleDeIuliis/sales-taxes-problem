@@ -21,31 +21,29 @@ MIT License
         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         SOFTWARE.
 */
-package com.salestaxes.model;
+package com.salestaxes.service;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.salestaxes.model.OrderItem;
 
-public class ItemTest {
+import java.util.List;
 
-    @Test
-    public void testCreateFoodItem(){
-        Item chocolateBar = new Item("chocolate bar", 5, false);
-        Assertions.assertEquals(0,chocolateBar.getTaxAmount());
-    }
-    @Test
-    public void testCreateImportedFoodItem(){
-        Item chocolateBar = new Item("chocolate bar", 5, true);
-        Assertions.assertEquals(5,chocolateBar.getTaxAmount());
-    }
-    @Test
-    public void testCreateGeneralItem(){
-        Item chocolateBar = new Item("bottle of perfume", 30, false);
-        Assertions.assertEquals(10,chocolateBar.getTaxAmount());
-    }
-    @Test
-    public void testCreateImportedGeneralItemNotFound(){
-        Item chocolateBar = new Item("Video game", 25, true);
-        Assertions.assertEquals(15,chocolateBar.getTaxAmount());
+public class ComputePriceAndTaxesImpl implements ComputePriceAndTaxes{
+
+    @Override
+    public String computeTotalPriceWithTaxes(List<OrderItem> orderedItems) {
+        StringBuilder outputBuilder = new StringBuilder();
+        double totalTaxedAmount = 0;
+        double totalCost = 0;
+        for(OrderItem item : orderedItems){
+            outputBuilder.append(String.format( "%d %s: %.2f\n",
+                    item.getQuantity(),
+                    item.getItem().getName(),
+                    item.computeTotalCost()));
+            totalTaxedAmount += item.computeTaxAmount() * item.getQuantity();
+            totalCost += item.computeTotalCost();
+        }
+        outputBuilder.append(String.format("Sales Taxes: %.2f\n", totalTaxedAmount));
+        outputBuilder.append(String.format("Total: %.2f", totalCost));
+        return  outputBuilder.toString();
     }
 }
