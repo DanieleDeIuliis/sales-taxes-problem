@@ -28,6 +28,9 @@ import lombok.Data;
 import com.salestaxes.model.ItemTypeUtils.ItemType;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Representation of an item with the total percentage amount of taxes
+ */
 @Slf4j
 @Data
 public class Item {

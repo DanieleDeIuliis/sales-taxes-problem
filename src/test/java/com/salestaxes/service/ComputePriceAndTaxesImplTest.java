@@ -26,8 +26,6 @@ package com.salestaxes.service;
 import com.salestaxes.model.Item;
 import com.salestaxes.model.OrderItem;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -47,37 +45,37 @@ public class ComputePriceAndTaxesImplTest {
                 "1 music CD: 16.49\n" +
                 "1 chocolate bar: 0.85\n" +
                 "Sales Taxes: 1.50\n" +
-                "Total: 42.32";
+                "Total: 42.32\n";
         Assertions.assertEquals(expectedOutput,
                 priceAndTaxesService.computeTotalPriceWithTaxes(orderedItems));
     }
     @Test
     public void testComputeTotalPriceWithTaxesAllImported(){
         List<OrderItem> orderedItems = new ArrayList<>(List.of(
-                new OrderItem(new Item("imported box of chocolates", 10.0, true),1),
-                new OrderItem(new Item("imported bottle of perfume", 47.50, true),1)
+                new OrderItem(new Item("box of chocolates", 10.0, true),1),
+                new OrderItem(new Item("bottle of perfume", 47.50, true),1)
         ));
         String expectedOutput = "1 imported box of chocolates: 10.50\n" +
                 "1 imported bottle of perfume: 54.65\n" +
                 "Sales Taxes: 7.65\n" +
-                "Total: 65.15";
+                "Total: 65.15\n";
         Assertions.assertEquals(expectedOutput,
                 priceAndTaxesService.computeTotalPriceWithTaxes(orderedItems));
     }
     @Test
     public void testComputeTotalPriceWithTaxesMixed(){
         List<OrderItem> orderedItems = new ArrayList<>(List.of(
-                new OrderItem(new Item("imported bottle of perfume", 27.99, true),1),
+                new OrderItem(new Item("bottle of perfume", 27.99, true),1),
                 new OrderItem(new Item("bottle of perfume", 18.99, false),1),
                 new OrderItem(new Item("packet of headache pills", 9.75, false),1),
-                new OrderItem(new Item("imported box of chocolates", 11.25, true),3)
+                new OrderItem(new Item("box of chocolates", 11.25, true),3)
         ));
         String expectedOutput = "1 imported bottle of perfume: 32.19\n" +
                 "1 bottle of perfume: 20.89\n" +
                 "1 packet of headache pills: 9.75\n" +
                 "3 imported box of chocolates: 35.55\n" +
                 "Sales Taxes: 7.90\n" +
-                "Total: 98.38";
+                "Total: 98.38\n";
         Assertions.assertEquals(expectedOutput,
                 priceAndTaxesService.computeTotalPriceWithTaxes(orderedItems));
     }

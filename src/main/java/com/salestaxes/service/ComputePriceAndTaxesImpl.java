@@ -27,8 +27,17 @@ import com.salestaxes.model.OrderItem;
 
 import java.util.List;
 
+/**
+ * Implementation of the service interface to compute the total prices and taxes
+ * for a list of items
+ */
 public class ComputePriceAndTaxesImpl implements ComputePriceAndTaxes{
 
+    /**
+     * Computes the total price and taxes amount for a list of items
+     * @param orderedItems list of items with the corresponding quantity
+     * @return a string representing the final bill
+     */
     @Override
     public String computeTotalPriceWithTaxes(List<OrderItem> orderedItems) {
         StringBuilder outputBuilder = new StringBuilder();

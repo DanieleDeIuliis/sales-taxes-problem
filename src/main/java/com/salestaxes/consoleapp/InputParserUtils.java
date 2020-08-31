@@ -35,6 +35,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utils class to parse the input from a file and extract the info to create a list of
+ * OrderItem.
+ */
 @Slf4j
 public class InputParserUtils {
 

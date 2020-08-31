@@ -29,12 +29,17 @@ import com.salestaxes.service.ComputePriceAndTaxesImpl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleAppMain {
 
+    /**
+     * Computes the final bill related to an order given as text file.
+     * @param inputFileName absolute path for the input file
+     * @return a string representing the final bill
+     * @throws FileNotFoundException
+     */
     public static String callComputePriceAndTaxesService(String inputFileName) throws FileNotFoundException {
         ComputePriceAndTaxes service = new ComputePriceAndTaxesImpl();
         List<OrderItem> orderedItems = null;

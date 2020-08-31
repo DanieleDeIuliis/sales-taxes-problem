@@ -23,7 +23,6 @@ MIT License
 */
 package com.salestaxes.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +30,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-
+/**
+ * Class to model an item and its quantity inside an order request
+ */
 @Slf4j
 @Data
 public class OrderItem {

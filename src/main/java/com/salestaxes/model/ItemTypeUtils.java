@@ -44,7 +44,9 @@ public class ItemTypeUtils {
         GENERAL
     }
 
-    private static Map<String, ItemType> itemToTypeMap = importItemsFromFile();
+    private static final String ITEM_DATA_FILE_NAME = "itemData/itemsToType.txt";
+
+    private static final Map<String, ItemType> ITEM_TO_TYPE_MAP = importItemsFromFile();
 
     /**
      * retrieves the type of the item based on its name. GENERAL is the default type
@@ -53,8 +55,8 @@ public class ItemTypeUtils {
      */
     public static ItemType getItemTypeFromName(String itemName){
         ItemType type;
-        if(itemToTypeMap.containsKey(itemName)){
-            type = itemToTypeMap.get(itemName);
+        if(ITEM_TO_TYPE_MAP.containsKey(itemName)){
+            type = ITEM_TO_TYPE_MAP.get(itemName);
         }else{
             type = ItemType.GENERAL;
             log.warn("Item {} not found. GENERAL type will be used.", itemName);
@@ -70,7 +72,7 @@ public class ItemTypeUtils {
     private static Map<String, ItemType> importItemsFromFile() {
         Map<String, ItemType> itemToTypeMap = new HashMap<>();
         File itemsToTypeFile = new File(
-                ItemTypeUtils.class.getClassLoader().getResource("itemsToType.txt").getFile());
+                ItemTypeUtils.class.getClassLoader().getResource(ITEM_DATA_FILE_NAME).getFile());
         Scanner itemScanner = null;
         try {
             itemScanner = new Scanner(itemsToTypeFile);

@@ -38,11 +38,12 @@ public class InputParserUtilsTest {
     @Test
     public void testParseInputFromFile() throws FileNotFoundException {
         File inputTestFile = new File(
-                InputParserUtilsTest.class.getClassLoader().getResource("parseInputTest.txt").getFile());
+                InputParserUtilsTest.class.getClassLoader().
+                        getResource("inputParser/parseInputTest.txt").getFile());
         List<OrderItem> orderedItems = InputParserUtils.parseInputFromFile(inputTestFile);
         Assertions.assertEquals(1, orderedItems.size());
         Item item = orderedItems.get(0).getItem();
-        Assertions.assertEquals("imported box of chocolates", item.getName());
+        Assertions.assertEquals("box of chocolates", item.getName());
         Assertions.assertEquals(5,item.getTaxAmount());
         Assertions.assertEquals(ItemTypeUtils.ItemType.FOOD, item.getType());
         Assertions.assertEquals(10.50,item.getPrice());
@@ -53,7 +54,8 @@ public class InputParserUtilsTest {
     @Test
     public void testParseInputFromFileWithZeroQuantity() throws FileNotFoundException {
         File inputTestFile = new File(
-                InputParserUtilsTest.class.getClassLoader().getResource("parseInputZeroQuantityTest.txt").getFile());
+                InputParserUtilsTest.class.getClassLoader().
+                        getResource("inputParser/parseInputZeroQuantityTest.txt").getFile());
         List<OrderItem> orderedItems = InputParserUtils.parseInputFromFile(inputTestFile);
         Assertions.assertEquals(0, orderedItems.size());
     }
