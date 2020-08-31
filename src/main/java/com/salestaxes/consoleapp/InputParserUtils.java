@@ -23,6 +23,7 @@ MIT License
 */
 package com.salestaxes.consoleapp;
 
+import com.salestaxes.exceptions.EmptyOrWrongInputException;
 import com.salestaxes.model.Item;
 import com.salestaxes.model.OrderItem;
 import lombok.extern.slf4j.Slf4j;
@@ -47,25 +48,48 @@ public class InputParserUtils {
      * @param inputFile file .txt containing the input
      * @return a list of corresponding OrderItem
      */
-    public static List<OrderItem> parseInputFromFile(File inputFile) throws FileNotFoundException {
+    public static List<OrderItem> parseInputFromFile(File inputFile)
+            throws FileNotFoundException, EmptyOrWrongInputException {
         List<OrderItem> orderedItems = new ArrayList<>();
         try {
             Scanner scanInput = new Scanner(inputFile);
             while(scanInput.hasNextLine()){
                 String line = scanInput.nextLine();
                 List<String> splittedLine = splitLine(line);
-                int quantity = Integer.valueOf(splittedLine.get(0));
-                if(quantity > 0){
+                if(isValidInput(splittedLine)){
                     orderedItems.add(createOrderItem(splittedLine));
-                }else{
-                    log.warn(String.format("Quantity value not valid, " +
-                            "creation of item {} will be skipped."), splittedLine.get(1));
                 }
             }
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("Input file not found. Insert an existing file name");
         }
+        if(orderedItems.size() == 0){
+            throw new EmptyOrWrongInputException();
+        }
         return orderedItems;
+    }
+
+    /**
+     * It checks if the input has proper values for quantity, name and price
+     * @param splittedInput list of relevant info from an input line
+     * @return the validity of the input
+     */
+    private static boolean isValidInput(List<String> splittedInput){
+        boolean isInputValid = true;
+        int quantity = Integer.valueOf(splittedInput.get(0));
+        double price = Double.valueOf(splittedInput.get(2));
+        if(quantity <= 0 || price <= 0){
+            log.warn("{} value not valid, creation of item {} will be skipped.",
+                    quantity > 0 ? "Price" : "Quantity",
+                    splittedInput.get(1));
+            isInputValid = false;
+        }
+        String itemName = splittedInput.get(1).replace("imported","").trim();
+        if(itemName.length() == 0) {
+            log.warn("Item name not valid. It will be skipped.");
+            isInputValid = false;
+        };
+        return isInputValid;
     }
 
     /**
@@ -74,16 +98,16 @@ public class InputParserUtils {
      *             [quantity] [name] at [price]
      * @return a list of quantity, name and price
      */
-    private static List<String> splitLine(String line){
+    private static List<String> splitLine(String line) throws EmptyOrWrongInputException {
         List<String> splittedLineToReturn = new ArrayList<>();
-        String regex = "([0-9]*)(.*)(at[ ]*)([0-9]*\\.?[0-9]*)";
+        String regex = "([+-]?[0-9]*)(.*)(at[ ]*)([+-]?[0-9]*[.,]?[0-9]*)";
         Pattern patternToMatch = Pattern.compile(regex);
         Matcher patternMatched = patternToMatch.matcher(line);
         while(patternMatched.find()){
             splittedLineToReturn.addAll(List.of(
                     patternMatched.group(1).trim(),
                     patternMatched.group(2).trim(),
-                    patternMatched.group(4).trim()
+                    patternMatched.group(4).replace(',','.').trim()
             ));
         }
         return splittedLineToReturn;

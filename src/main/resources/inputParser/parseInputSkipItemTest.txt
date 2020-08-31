@@ -1,0 +1,7 @@
+0 box of chocolates at 99
+-1 box of imported oranges at 10
+2 apples at 0
+3 books at -25.72
+2       at 9.89
+3      imported       at 69.75
+10 flowers at 30

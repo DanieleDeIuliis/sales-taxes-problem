@@ -23,6 +23,7 @@ MIT License
 */
 package com.salestaxes.consoleapp;
 
+import com.salestaxes.exceptions.EmptyOrWrongInputException;
 import com.salestaxes.model.OrderItem;
 import com.salestaxes.service.ComputePriceAndTaxes;
 import com.salestaxes.service.ComputePriceAndTaxesImpl;
@@ -44,9 +45,9 @@ public class ConsoleAppMain {
         ComputePriceAndTaxes service = new ComputePriceAndTaxesImpl();
         List<OrderItem> orderedItems = null;
         try{
-            File inputFile = new File(inputFileName);
+            File inputFile = new File(inputFileName.trim());
             orderedItems = InputParserUtils.parseInputFromFile(inputFile);
-        }catch(FileNotFoundException e){
+        }catch(FileNotFoundException | EmptyOrWrongInputException e){
             throw new FileNotFoundException("Input file not found. Insert an existing file name");
         }
         return service.computeTotalPriceWithTaxes(orderedItems);

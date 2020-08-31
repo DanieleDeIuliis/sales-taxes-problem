@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComputePriceAndTaxesImplTest {
+
     private static ComputePriceAndTaxes priceAndTaxesService = new ComputePriceAndTaxesImpl();
 
     @Test
@@ -49,6 +50,7 @@ public class ComputePriceAndTaxesImplTest {
         Assertions.assertEquals(expectedOutput,
                 priceAndTaxesService.computeTotalPriceWithTaxes(orderedItems));
     }
+
     @Test
     public void testComputeTotalPriceWithTaxesAllImported(){
         List<OrderItem> orderedItems = new ArrayList<>(List.of(
@@ -62,6 +64,7 @@ public class ComputePriceAndTaxesImplTest {
         Assertions.assertEquals(expectedOutput,
                 priceAndTaxesService.computeTotalPriceWithTaxes(orderedItems));
     }
+
     @Test
     public void testComputeTotalPriceWithTaxesMixed(){
         List<OrderItem> orderedItems = new ArrayList<>(List.of(

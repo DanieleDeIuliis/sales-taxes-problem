@@ -23,6 +23,7 @@ MIT License
 */
 package com.salestaxes.consoleapp;
 
+import com.salestaxes.exceptions.EmptyOrWrongInputException;
 import com.salestaxes.model.Item;
 import com.salestaxes.model.ItemTypeUtils;
 import com.salestaxes.model.OrderItem;
@@ -36,7 +37,7 @@ import java.util.List;
 public class InputParserUtilsTest {
 
     @Test
-    public void testParseInputFromFile() throws FileNotFoundException {
+    public void testParseInputFromFile() throws FileNotFoundException, EmptyOrWrongInputException {
         File inputTestFile = new File(
                 InputParserUtilsTest.class.getClassLoader().
                         getResource("inputParser/parseInputTest.txt").getFile());
@@ -52,12 +53,12 @@ public class InputParserUtilsTest {
     }
 
     @Test
-    public void testParseInputFromFileWithZeroQuantity() throws FileNotFoundException {
+    public void testParseInputFromFileWithZeroQuantity() throws FileNotFoundException, EmptyOrWrongInputException {
         File inputTestFile = new File(
                 InputParserUtilsTest.class.getClassLoader().
-                        getResource("inputParser/parseInputZeroQuantityTest.txt").getFile());
+                        getResource("inputParser/parseInputSkipItemTest.txt").getFile());
         List<OrderItem> orderedItems = InputParserUtils.parseInputFromFile(inputTestFile);
-        Assertions.assertEquals(0, orderedItems.size());
+        Assertions.assertEquals(1, orderedItems.size());
     }
 
     @Test
@@ -66,4 +67,15 @@ public class InputParserUtilsTest {
             InputParserUtils.parseInputFromFile(new File(""));
         });
     }
+
+    @Test
+    public void testParseInputFromFileEmptyInput(){
+        File inputTestFile = new File(
+                InputParserUtilsTest.class.getClassLoader().
+                        getResource("inputParser/parseInputTestEmpty.txt").getFile());
+        Assertions.assertThrows(EmptyOrWrongInputException.class, () -> {
+            InputParserUtils.parseInputFromFile(inputTestFile);
+        });
+    }
+
 }

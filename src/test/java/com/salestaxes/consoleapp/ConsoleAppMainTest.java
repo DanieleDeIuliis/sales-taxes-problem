@@ -36,11 +36,10 @@ public class ConsoleAppMainTest {
 
     private static final String INPUT_DIR = "consoleAppTest/input/";
     private static final String OUTPUT_DIR = "consoleAppTest/expectedOutput/";
-    private static final String OUTPUT_SUFFIX = "_output";
     private static final String FILE_EXTENSION = ".txt";
 
     @ParameterizedTest
-    @ValueSource(strings = {"test1", "test2","test3"})
+    @ValueSource(strings = {"test1", "test2","test3","skipItem","test3priceComma"})
     public void testCallComputePriceAndTaxesService(String fileName) throws FileNotFoundException {
         String pathToTestFile =
                 this.getClass().getClassLoader().
@@ -62,7 +61,7 @@ public class ConsoleAppMainTest {
     private String getExpectedResultFromOutputFile(String fileName) throws FileNotFoundException {
         StringBuilder outputBuilder = new StringBuilder();
         File outputFile = new File(this.getClass().getClassLoader().
-                getResource(OUTPUT_DIR + fileName + OUTPUT_SUFFIX + FILE_EXTENSION).getFile());
+                getResource(OUTPUT_DIR + fileName + FILE_EXTENSION).getFile());
         Scanner outputScan = new Scanner(outputFile);
         while(outputScan.hasNextLine()){
             outputBuilder.append(String.format("%s\n",outputScan.nextLine()));
