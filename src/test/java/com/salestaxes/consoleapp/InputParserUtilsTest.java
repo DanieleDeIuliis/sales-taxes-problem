@@ -53,7 +53,7 @@ public class InputParserUtilsTest {
     }
 
     @Test
-    public void testParseInputFromFileWithZeroQuantity() throws FileNotFoundException, EmptyOrWrongInputException {
+    public void testParseInputFromFileWithItemsToSkip() throws FileNotFoundException, EmptyOrWrongInputException {
         File inputTestFile = new File(
                 InputParserUtilsTest.class.getClassLoader().
                         getResource("inputParser/parseInputSkipItemTest.txt").getFile());

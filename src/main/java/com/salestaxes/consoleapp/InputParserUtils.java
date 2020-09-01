@@ -76,19 +76,23 @@ public class InputParserUtils {
      */
     private static boolean isValidInput(List<String> splittedInput){
         boolean isInputValid = true;
-        int quantity = Integer.valueOf(splittedInput.get(0));
-        double price = Double.valueOf(splittedInput.get(2));
-        if(quantity <= 0 || price <= 0){
-            log.warn("{} value not valid, creation of item {} will be skipped.",
-                    quantity > 0 ? "Price" : "Quantity",
-                    splittedInput.get(1));
+        if(splittedInput.size() == 3){
+            int quantity = Integer.valueOf(splittedInput.get(0));
+            double price = Double.valueOf(splittedInput.get(2));
+            if(quantity <= 0 || price <= 0){
+                log.warn("{} value not valid, creation of item {} will be skipped.",
+                        quantity > 0 ? "Price" : "Quantity",
+                        splittedInput.get(1));
+                isInputValid = false;
+            }
+            String itemName = splittedInput.get(1).replace("imported","").trim();
+            if(itemName.length() == 0) {
+                log.warn("Item name not valid. It will be skipped.");
+                isInputValid = false;
+            };
+        }else{
             isInputValid = false;
         }
-        String itemName = splittedInput.get(1).replace("imported","").trim();
-        if(itemName.length() == 0) {
-            log.warn("Item name not valid. It will be skipped.");
-            isInputValid = false;
-        };
         return isInputValid;
     }
 
@@ -100,7 +104,7 @@ public class InputParserUtils {
      */
     private static List<String> splitLine(String line) throws EmptyOrWrongInputException {
         List<String> splittedLineToReturn = new ArrayList<>();
-        String regex = "([+-]?[0-9]*)(.*)(at[ ]*)([+-]?[0-9]*[.,]?[0-9]*)";
+        String regex = "([+-]?[0-9]+)(.*)(at[ ]*)([+-]?[0-9]*[.,]?[0-9]+)";
         Pattern patternToMatch = Pattern.compile(regex);
         Matcher patternMatched = patternToMatch.matcher(line);
         while(patternMatched.find()){
