@@ -54,7 +54,7 @@ public class ConsoleAppMain {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println("Please insert the name of the input file including the extension:");
+        System.out.println("Please insert the full path of the input file including the extension:");
         Scanner inputReader = new Scanner(System.in);
         String inputFileName = inputReader.nextLine();
         System.out.println(callComputePriceAndTaxesService(inputFileName));
